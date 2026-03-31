@@ -13,6 +13,8 @@ app = Flask(__name__)
 CORS(app, origins=[
     "http://localhost:3003",
     "http://localhost:8008",
+    "https://baepo.shop",
+    "http://43.201.249.175",
     "null" # 로컬 파일에서 테스트할 때 필요
 ])
 
@@ -35,4 +37,4 @@ def health():
     return jsonify({ 'status': 'ok', 'message': 'AI server 정상 동작 중' })
 
 if __name__ == '__main__':
-    app.run(port=5005, debug=True)
+    app.run(host='0.0.0.0', port=5005, debug=True)

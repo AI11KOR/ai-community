@@ -12,12 +12,11 @@ router.get('/github', passport.authenticate('github', {
 
 // github callback
 router.get('/github/callback',
-    passport.authenticate('github', { session: false, failureRedirect: '/login' }), // 로그인 실패 시 이 경로로 이동
+    passport.authenticate('github', { session: false, failureRedirect: '/login' }),
     (req, res) => {
-        // passport가 인증 후 유저 정보를 req.user에 넣음 타입스크립트기에 as any로 타입체크 무시로 처리
         const user = req.user as any
-        // 프론트로 토큰 전달
-        res.redirect(`http://localhost:3003/auth/callback?accessToken=${user.accessToken}&refreshToken=${user.refreshToken}`)
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3003'
+        res.redirect(`${frontendUrl}/auth/callback?accessToken=${user.accessToken}&refreshToken=${user.refreshToken}`)
     }
 )
 
@@ -30,7 +29,8 @@ router.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login'}),
     (req, res) => {
         const user = req.user as any
-        res.redirect(`http://localhost:3003/auth/callback?accessToken=${user.accessToken}&refreshToken=${user.refreshToken}`)
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3003'
+        res.redirect(`${frontendUrl}/auth/callback?accessToken=${user.accessToken}&refreshToken=${user.refreshToken}`)
     }
 )
 

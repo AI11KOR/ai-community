@@ -7,7 +7,7 @@ import { generateTokens } from "../utils/jwtUtils";
 passport.use(new GitHubStartegy({
         clientID: process.env.GITHUB_CLIENT_ID!,
         clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-        callbackURL: 'http://localhost:8008/api/social/github/callback'
+        callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:8008/api/social/github/callback'
     },
     async (accessToken: string, refreshToken: string, profile: any, done: any) => {
         try {

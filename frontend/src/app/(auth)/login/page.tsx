@@ -24,13 +24,13 @@ export default function LoginPage() {
 
         <div className="space-y-2">
           <a
-            href="http://localhost:8008/api/social/github"
+            href={`${process.env.NEXT_PUBLIC_API_URL}/api/social/github`}
             className="block w-full text-center border border-gray-300 rounded-md py-2 text-sm hover:bg-gray-50"
           >
             GitHub으로 로그인
           </a>
           <a
-            href="http://localhost:8008/api/social/google"
+             href={`${process.env.NEXT_PUBLIC_API_URL}/api/social/google`}
             className="block w-full text-center border border-gray-300 rounded-md py-2 text-sm hover:bg-gray-50"
           >
             Google로 로그인

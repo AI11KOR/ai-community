@@ -1,11 +1,14 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import api from "@/lib/axios"
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from "@/store/authStore";
 
-export default function SocailCallbackPage() {
+// useSearchParams 쓰는 로직을 여기로 분리
+// Next.js 14에서 useSearchParams()는 CSR에서만 동작하는데, 빌드 타임에 Static Generation 
+// 시도하면서 에러가 발생 따라서 분리하여 처리하여야 함
+function CallbackContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const { setAuth } = useAuthStore()
@@ -48,12 +51,28 @@ export default function SocailCallbackPage() {
         handleCallback()
     }, [])
 
-        return (
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+            <div className="text-center">
+                <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                <p className="text-sm text-gray-500">로그인 처리 중...</p>
+            </div>
+        </div>
+    )
+}
+
+// ✅ export 하는 컴포넌트는 Suspense만 담당
+export default function SocialCallbackPage() {
+    return (
+        <Suspense fallback={
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-center">
                     <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
                     <p className="text-sm text-gray-500">로그인 처리 중...</p>
                 </div>
             </div>
-        )
+        }>
+            <CallbackContent />
+        </Suspense>
+    )
 }

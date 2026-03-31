@@ -15,11 +15,10 @@ COPY --from=builder /app/package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
+# COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.* ./
 
 
-COPY --from=builder /app/next.config.* ./
 
 EXPOSE 3003
 CMD ["node_modules/.bin/next", "start", "-p", "3003"]
