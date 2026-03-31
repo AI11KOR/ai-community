@@ -1,0 +1,122 @@
+[
+    {
+      "code": "for i in range(len(arr)):\n    print(arr[i])",
+      "review": "enumerate() 사용을 권장합니다. 'for i, val in enumerate(arr): print(val)' 형태가 더 파이썬스럽고 가독성이 좋습니다."
+    },
+    {
+      "code": "except Exception:\n    pass",
+      "review": "예외를 무시하면 디버깅이 매우 어려워집니다. 최소한 logging.error()로 로깅하거나 raise로 예외를 전파하세요."
+    },
+    {
+      "code": "def get_user(id):\n    return db.query('SELECT * FROM users WHERE id=' + id)",
+      "review": "SQL 인젝션 취약점이 있습니다. 반드시 파라미터 바인딩을 사용하세요. 'db.query('SELECT * FROM users WHERE id=?', (id,))'"
+    },
+    {
+      "code": "password = '1234'",
+      "review": "패스워드를 하드코딩하면 절대 안 됩니다. 환경변수나 시크릿 매니저를 사용하세요. os.environ.get('PASSWORD')를 활용하세요."
+    },
+    {
+      "code": "def fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)",
+      "review": "순수 재귀 구현은 O(2^n)으로 매우 비효율적입니다. 메모이제이션(lru_cache)이나 동적 프로그래밍으로 O(n)으로 개선하세요."
+    },
+    {
+      "code": "result = []\nfor i in range(100):\n    result.append(i * 2)",
+      "review": "리스트 컴프리헨션으로 개선하세요. 'result = [i * 2 for i in range(100)]' 이 더 파이썬스럽고 성능도 좋습니다."
+    },
+    {
+      "code": "def connect():\n    conn = db.connect('localhost', 'root', '1234', 'mydb')\n    return conn",
+      "review": "DB 접속 정보를 하드코딩하면 보안상 위험합니다. 환경변수로 분리하고, 커넥션 풀 사용을 권장합니다."
+    },
+    {
+      "code": "x = 1\nxx = 2\nxxx = 3",
+      "review": "변수명이 의미를 전달하지 못합니다. 'count', 'total', 'index' 처럼 역할을 명확히 표현하는 이름을 사용하세요."
+    },
+    {
+      "code": "def f(x):\n    return x*x",
+      "review": "함수명 'f'는 의미가 없습니다. 'square' 또는 'calculate_square'처럼 기능을 설명하는 이름을 사용하세요. 타입 힌트도 추가하면 좋습니다."
+    },
+    {
+      "code": "if flag == True:\n    do_something()",
+      "review": "'== True' 비교는 불필요합니다. 'if flag:' 로 줄이세요. Boolean 값은 직접 조건으로 사용하는 것이 파이썬스럽습니다."
+    },
+    {
+      "code": "data = open('file.txt').read()",
+      "review": "파일을 열면 반드시 닫아야 합니다. 'with open('file.txt') as f: data = f.read()' 형태로 컨텍스트 매니저를 사용하세요."
+    },
+    {
+      "code": "import *\nfrom os import *",
+      "review": "와일드카드 임포트는 네임스페이스를 오염시킵니다. 필요한 모듈만 명시적으로 임포트하세요. 'from os import path, getcwd'"
+    },
+    {
+      "code": "def get_items():\n    items = []\n    for i in range(1000000):\n        items.append(i)\n    return items",
+      "review": "백만 개 아이템을 메모리에 한번에 올리면 메모리 부족이 발생할 수 있습니다. 제너레이터를 사용하세요. 'yield i'로 변경하면 메모리를 효율적으로 사용합니다."
+    },
+    {
+      "code": "try:\n    result = 10 / x\nexcept:\n    print('error')",
+      "review": "bare except는 KeyboardInterrupt 같은 시스템 예외까지 잡습니다. 'except ZeroDivisionError:'처럼 구체적인 예외 타입을 명시하세요."
+    },
+    {
+      "code": "class User:\n    def __init__(self):\n        self.name = None\n        self.age = None\n        self.email = None\n        self.password = None",
+      "review": "생성자에서 모든 속성을 None으로 초기화하는 대신 매개변수로 받으세요. 타입 힌트와 dataclass 데코레이터 사용을 고려하세요."
+    },
+    {
+      "code": "def send_email(user):\n    # TODO: 나중에 구현\n    pass",
+      "review": "TODO 주석이 남아있습니다. 미구현 기능은 NotImplementedError를 raise하거나 구현 일정을 명시하세요. 주석만 남기면 추후 누락될 수 있습니다."
+    },
+    {
+      "code": "numbers = [1,2,3,4,5]\ntotal = 0\nfor n in numbers:\n    total = total + n",
+      "review": "sum() 내장함수를 사용하세요. 'total = sum(numbers)' 한 줄로 간결하게 표현할 수 있습니다. 또한 '+=' 연산자 사용을 권장합니다."
+    },
+    {
+      "code": "def check_age(age):\n    if age > 0:\n        if age < 18:\n            return 'minor'\n        else:\n            return 'adult'\n    else:\n        return 'invalid'",
+      "review": "중첩 if문을 단순화하세요. 'guard clause' 패턴을 사용하거나 조건을 합쳐서 가독성을 높이세요. 'if age <= 0: return invalid'"
+    },
+    {
+      "code": "response = requests.get(url)\ndata = response.json()",
+      "review": "네트워크 요청에는 반드시 예외처리와 타임아웃을 설정하세요. 'requests.get(url, timeout=5)'와 try-except로 ConnectionError, Timeout을 처리하세요."
+    },
+    {
+      "code": "def bubble_sort(arr):\n    for i in range(len(arr)):\n        for j in range(len(arr)-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]",
+      "review": "버블소트는 O(n²)으로 비효율적입니다. Python 내장 sort()는 Timsort 알고리즘으로 O(n log n)입니다. 실무에서는 내장 정렬을 사용하고, 정렬 알고리즘 구현이 목적이라면 최적화 버전(조기 종료 조건)을 추가하세요."
+    },
+    {
+      "code": "global_list = []\ndef add_item(item):\n    global_list.append(item)",
+      "review": "전역 변수 사용은 사이드 이펙트를 유발합니다. 클래스로 상태를 캡슐화하거나 함수의 매개변수로 전달하는 방식을 권장합니다."
+    },
+    {
+      "code": "str1 = ''\nfor i in range(1000):\n    str1 = str1 + str(i)",
+      "review": "문자열 반복 연결은 O(n²) 성능입니다. 리스트에 모아서 join()으로 합치세요. 'result = ''.join(str(i) for i in range(1000))'"
+    },
+    {
+      "code": "def divide(a, b):\n    return a / b",
+      "review": "0으로 나누는 경우를 처리하지 않았습니다. ZeroDivisionError 예외처리 또는 'if b == 0: raise ValueError('Divisor cannot be zero')' 검증을 추가하세요."
+    },
+    {
+      "code": "import time\ndef slow_function():\n    time.sleep(10)\n    return 'done'",
+      "review": "블로킹 작업은 비동기로 처리하는 것을 권장합니다. asyncio와 await를 사용하거나, 별도 스레드/프로세스로 실행하세요."
+    },
+    {
+      "code": "user_input = input('Enter command: ')\nos.system(user_input)",
+      "review": "사용자 입력을 직접 시스템 명령어로 실행하면 커맨드 인젝션 취약점이 발생합니다. subprocess 모듈의 화이트리스트 방식을 사용하고 입력값을 반드시 검증하세요."
+    },
+    {
+      "code": "def get_config():\n    return {\n        'db_host': 'localhost',\n        'db_port': 5432,\n        'secret_key': 'mysecretkey123'\n    }",
+      "review": "설정값, 특히 secret_key를 코드에 하드코딩하면 보안 위험이 있습니다. python-dotenv로 .env 파일에서 읽어오거나 환경변수를 사용하세요."
+    },
+    {
+      "code": "def process(data):\n    # 데이터 처리\n    x = data[0] # 첫번째\n    y = data[1] # 두번째\n    z = data[2] # 세번째\n    return x + y + z",
+      "review": "인덱스 접근 대신 언패킹을 사용하세요. 'x, y, z = data[:3]' 또는 namedtuple을 사용하면 가독성이 높아집니다. 인덱스 범위 초과 예외처리도 추가하세요."
+    },
+    {
+      "code": "while True:\n    data = fetch_data()\n    process(data)",
+      "review": "무한 루프에 종료 조건과 예외처리가 없습니다. KeyboardInterrupt 처리, 최대 재시도 횟수 제한, 오류 발생 시 적절한 대기 시간(backoff)을 추가하세요."
+    },
+    {
+      "code": "def login(username, password):\n    if username == 'admin' and password == 'admin123':\n        return True",
+      "review": "패스워드를 평문으로 비교하면 절대 안 됩니다. bcrypt나 argon2로 해싱하고 비교하세요. 또한 하드코딩된 인증 정보는 심각한 보안 취약점입니다."
+    },
+    {
+      "code": "df = pd.read_csv('huge_file.csv')\nresult = df[df['value'] > 100]",
+      "review": "대용량 CSV를 한번에 메모리에 올리면 OOM이 발생할 수 있습니다. chunksize 옵션으로 청크 단위 처리하거나, dask 라이브러리를 사용하는 것을 권장합니다."
+    }
+  ]

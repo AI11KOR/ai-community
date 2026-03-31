@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String?  // 소셜 로그인은 비밀번호 없을 수 있어서 ?
+  name      String
+  avatar    String?
+  provider  String   @default("local") // local, github, google
+  providerId String? // 소셜 로그인 고유 ID
+  refreshToken String?
+
+  posts     Post[]
+  comments  Comment[]
+  rooms     MeetingRoom[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  code      String?  // 공유할 코드
+  language  String?  // 언어 (javascript, python 등)
+  aiReview  String?  // AI 코드 리뷰 결과 저장
+
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+
+  comments  Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+
+  createdAt DateTime @default(now())
+}
+
+model MeetingRoom {
+  id        Int      @id @default(autoincrement())
+  title     String
+  isActive  Boolean  @default(true)
+
+  host      User     @relation(fields: [hostId], references: [id])
+  hostId    Int
+
+  notes     MeetingNote[]
+
+  createdAt DateTime @default(now())
+}
+
+model MeetingNote {
+  id          Int      @id @default(autoincrement())
+  transcript  String   // Whisper STT 원문
+  summary     String?  // GPT 요약
+  actionItems String?  // 액션아이템 (JSON 문자열)
+  sentiment   String?  // 분위기 분석 (JSON 문자열)
+  efficiency  String?  // 효율성 점수 (JSON 문자열)
+  keywords    String?  // 키워드 (JSON 문자열)
+  speakers    String?  // 화자 분석 (JSON 문자열)
+
+  room        MeetingRoom @relation(fields: [roomId], references: [id])
+  roomId      Int
+
+  createdAt   DateTime @default(now())
+}
